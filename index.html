@@ -59,6 +59,38 @@
       color: var(--muted);
     }
 
+    .youtube-link-wrap {
+      display: flex;
+      justify-content: center;
+      margin: -10px 0 18px;
+    }
+
+    .youtube-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: #fff;
+      border: 1px solid #ffd1e4;
+      box-shadow: 0 8px 16px rgba(233, 30, 99, 0.18);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .youtube-link:hover,
+    .youtube-link:focus-visible {
+      transform: translateY(-1px);
+      box-shadow: 0 12px 20px rgba(233, 30, 99, 0.28);
+    }
+
+    .youtube-link img {
+      width: 40px;
+      height: 40px;
+      display: block;
+    }
+
     .flower-row {
       display: flex;
       justify-content: center;
@@ -184,6 +216,15 @@
   <main class="container">
     <h1>서울 대표 벚꽃 명소</h1>
     <p class="subtitle">지도에서 위치를 확인하고, 아래 카드로 각 장소의 매력을 살펴보세요.</p>
+    <div class="youtube-link-wrap">
+      <a
+        class="youtube-link"
+        href="https://youtu.be/dGCT5qn1ZhU?si=nOIck9f7CkpER7wD"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="유튜브 영상 열기"
+      ><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/youtube.svg" alt="유튜브 아이콘"></a>
+    </div>
     <div class="flower-row" aria-label="벚꽃 장식 이미지">
       <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f338.png" alt="벚꽃">
       <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f338.png" alt="벚꽃">
@@ -224,10 +265,10 @@
         <p>자연 친화적인 분위기에서 여유롭게 벚꽃을 즐길 수 있으며, 카페와 산책 코스도 잘 갖춰져 있습니다.</p>
         <img src="https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyNTA0MDZfMTU1%2FMDAxNzQzOTQwODEzMzU0.x78y45J34EArPJbOcYa5QxfV_pQ-0WQvV6VrZEbVaXwg.TMO1mGBynvmqHXewsir-n4BAIfR97Of7CmDGpFI4IQ4g.JPEG%2F%25BC%25AD%25BF%25EF_%25B5%25A5%25C0%25CC%25C6%25AE_%252823%2529.jpg&type=a340" alt="서울숲 벚꽃 풍경">
       </article>
-      <article class="card" id="card-잠실-석촌호수" data-spot-name="잠실 석촌호수" data-detail-url="detail.html?spot=잠실 석촌호수" role="button" tabindex="0">
-        <h3>잠실 석촌호수</h3>
+      <article class="card" id="card-석촌호수공원" data-spot-name="석촌호수공원" data-detail-url="detail.html?spot=석촌호수공원" role="button" tabindex="0">
+        <h3>석촌호수공원</h3>
         <p>호수를 따라 이어지는 벚꽃길이 아름답고 야경도 좋아, 낮과 밤 모두 매력적인 봄 명소입니다.</p>
-        <img src="https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMzAzMzBfMTAw%2FMDAxNjgwMTg0ODM0NTMz.GBeTmtYUBOIGEyb5DKLBoz1k6R4mrVyQUr1NSBQuUc0g._LPnREZIFbMHj8Muer5J0YDaJ8Lg8Jjy4G99uV5O7M0g.JPEG.psu3001%2Foutput_2101060979.jpg&type=a340" alt="잠실 석촌호수 벚꽃 풍경">
+        <img src="https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMzAzMzBfMTAw%2FMDAxNjgwMTg0ODM0NTMz.GBeTmtYUBOIGEyb5DKLBoz1k6R4mrVyQUr1NSBQuUc0g._LPnREZIFbMHj8Muer5J0YDaJ8Lg8Jjy4G99uV5O7M0g.JPEG.psu3001%2Foutput_2101060979.jpg&type=a340" alt="석촌호수공원 벚꽃 풍경">
       </article>
     </section>
   </main>
@@ -272,7 +313,7 @@
         lng: 127.0374
       },
       {
-        name: "잠실 석촌호수",
+        name: "석촌호수공원",
         lat: 37.5079,
         lng: 127.1007
       }
