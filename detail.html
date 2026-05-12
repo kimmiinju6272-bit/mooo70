@@ -167,6 +167,34 @@
       font-size: 13px;
       padding: 0 16px 24px;
     }
+
+    .petal-layer {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 9999;
+    }
+
+    .petal {
+      position: absolute;
+      top: -30px;
+      width: 14px;
+      height: 10px;
+      background: radial-gradient(circle at 30% 30%, #ffe8f1 0%, #ffc4de 70%);
+      border-radius: 80% 20% 70% 30%;
+      opacity: 0.85;
+      animation: petal-fall linear forwards;
+    }
+
+    @keyframes petal-fall {
+      0% {
+        transform: translate3d(0, -20px, 0) rotate(0deg);
+      }
+      100% {
+        transform: translate3d(var(--drift-x, 80px), 110vh, 0) rotate(360deg);
+      }
+    }
   </style>
 </head>
 <body>
@@ -197,6 +225,10 @@
         <div class="meta-item">
           <span class="k">주요 포인트</span>
           <span class="v" id="spot-point">-</span>
+        </div>
+        <div class="meta-item">
+          <span class="k">이화여대(현위치) 기준 도로 거리</span>
+          <span class="v" id="spot-distance">계산 중...</span>
         </div>
       </div>
     </section>
@@ -230,12 +262,48 @@
   <p class="footer">서울 벚꽃 명소 상세페이지</p>
 
   <script>
+    function startPetalAnimation() {
+      const layer = document.createElement("div");
+      layer.className = "petal-layer";
+      document.body.appendChild(layer);
+
+      function spawnPetal() {
+        const petal = document.createElement("span");
+        petal.className = "petal";
+        petal.style.left = `${Math.random() * 100}vw`;
+        petal.style.opacity = (0.55 + Math.random() * 0.35).toFixed(2);
+        petal.style.width = `${10 + Math.random() * 10}px`;
+        petal.style.height = `${8 + Math.random() * 8}px`;
+        petal.style.setProperty("--drift-x", `${-120 + Math.random() * 240}px`);
+        petal.style.animationDuration = `${7 + Math.random() * 8}s`;
+        layer.appendChild(petal);
+        petal.addEventListener("animationend", () => {
+          petal.remove();
+        });
+      }
+
+      setInterval(spawnPetal, 320);
+      for (let i = 0; i < 16; i += 1) {
+        setTimeout(spawnPetal, i * 140);
+      }
+    }
+
+    startPetalAnimation();
+
+    const currentLocation = {
+      name: "이화여자대학교",
+      lat: 37.5619,
+      lng: 126.9468
+    };
+
     const details = {
       "경복궁": {
         subtitle: "고궁과 벚꽃이 어우러진 전통미",
         address: "서울 종로구 사직로 161",
         time: "오전 9시~11시",
         point: "근정전, 경회루 주변",
+        lat: 37.5796,
+        lng: 126.977,
         description: "고궁의 단아한 건축미 위로 벚꽃이 내려앉는 서울 대표 봄 명소입니다.",
         highlight: "한복 착용 후 방문하면 사진 분위기가 더 살아납니다.",
         route: ["광화문 입장", "흥례문-근정전 관람", "경회루 주변 산책"],
@@ -251,6 +319,8 @@
         address: "서울 광진구 능동로 216",
         time: "오전 10시 전",
         point: "호수 산책로, 중앙 잔디광장",
+        lat: 37.5485,
+        lng: 127.0818,
         description: "넓은 동선과 편한 접근성으로 가족 단위 방문객이 많은 벚꽃 명소입니다.",
         highlight: "동물원, 놀이시설과 함께 하루 코스로 즐기기 좋습니다.",
         route: ["정문 입장", "호수길 산책", "잔디광장 휴식"],
@@ -266,6 +336,8 @@
         address: "서울 송파구 잠실로 148",
         time: "오후 5시~야간",
         point: "동호/서호 순환 산책길",
+        lat: 37.5079,
+        lng: 127.1007,
         description: "호수 반영과 벚꽃이 함께 보여 낮과 밤 모두 매력적인 풍경을 제공합니다.",
         highlight: "야간 조명 시간대에 감성적인 사진 촬영이 가능합니다.",
         route: ["동호 시작", "서호 방향 순환", "호수 야경 감상"],
@@ -281,6 +353,8 @@
         address: "서울 영등포구 여의서로 일대",
         time: "오전 8시~10시",
         point: "국회의사당 뒤편 윤중로",
+        lat: 37.5283,
+        lng: 126.9335,
         description: "서울 벚꽃 시즌을 대표하는 장소로 긴 벚꽃길 산책을 즐길 수 있습니다.",
         highlight: "한강공원 피크닉을 연계하면 하루 일정이 알차집니다.",
         route: ["여의나루역 출발", "윤중로 산책", "한강공원 이동"],
@@ -296,6 +370,8 @@
         address: "서울 용산구 남산공원길 105",
         time: "해질녘~저녁",
         point: "남산순환로, 케이블카 주변",
+        lat: 37.5512,
+        lng: 126.9882,
         description: "벚꽃 산책 후 전망대에서 서울 전경을 감상할 수 있는 입체적 코스입니다.",
         highlight: "일몰 시간대 방문 시 도심 야경과 함께 감상 가능",
         route: ["남산 입구 출발", "순환로 벚꽃길", "타워 전망대 방문"],
@@ -311,6 +387,8 @@
         address: "서울 성동구 뚝섬로 273",
         time: "오전 9시~11시",
         point: "가족마당, 호수 주변길",
+        lat: 37.5444,
+        lng: 127.0374,
         description: "도심 접근성이 좋고 넓은 잔디와 함께 벚꽃 피크닉을 즐기기 좋습니다.",
         highlight: "산책, 피크닉, 카페 투어를 함께 하기 좋습니다.",
         route: ["서울숲역 입장", "가족마당 산책", "호수길 이동"],
@@ -326,6 +404,7 @@
     const params = new URLSearchParams(window.location.search);
     const spot = params.get("spot") || "경복궁";
     const data = details[spot] || details["경복궁"];
+    const distanceEl = document.getElementById("spot-distance");
 
     document.title = `${spot} 상세페이지`;
     document.getElementById("spot-title").textContent = `${spot} 상세페이지`;
@@ -368,6 +447,44 @@
       li.appendChild(text);
       reviewsEl.appendChild(li);
     });
+
+    function haversineKm(originLat, originLng, destLat, destLng) {
+      const toRad = (deg) => (deg * Math.PI) / 180;
+      const earthRadiusKm = 6371;
+      const dLat = toRad(destLat - originLat);
+      const dLng = toRad(destLng - originLng);
+      const a = Math.sin(dLat / 2) ** 2 +
+        Math.cos(toRad(originLat)) * Math.cos(toRad(destLat)) * Math.sin(dLng / 2) ** 2;
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      return earthRadiusKm * c;
+    }
+
+    async function setRoadDistance() {
+      if (typeof data.lat !== "number" || typeof data.lng !== "number") {
+        distanceEl.textContent = "거리 정보를 찾을 수 없습니다.";
+        return;
+      }
+
+      const osrmUrl = `https://router.project-osrm.org/route/v1/driving/${currentLocation.lng},${currentLocation.lat};${data.lng},${data.lat}?overview=false`;
+
+      try {
+        const response = await fetch(osrmUrl);
+        if (!response.ok) {
+          throw new Error("OSRM request failed");
+        }
+        const result = await response.json();
+        const meters = result.routes && result.routes[0] ? result.routes[0].distance : null;
+        if (!meters) {
+          throw new Error("No route distance");
+        }
+        distanceEl.textContent = `${(meters / 1000).toFixed(1)} km (도로 기준)`;
+      } catch (error) {
+        const fallbackKm = haversineKm(currentLocation.lat, currentLocation.lng, data.lat, data.lng);
+        distanceEl.textContent = `${fallbackKm.toFixed(1)} km (직선거리 추정)`;
+      }
+    }
+
+    setRoadDistance();
   </script>
 </body>
 </html>

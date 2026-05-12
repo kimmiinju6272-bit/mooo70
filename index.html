@@ -61,8 +61,16 @@
 
     .youtube-link-wrap {
       display: flex;
+      flex-direction: column;
+      align-items: center;
       justify-content: center;
       margin: -10px 0 18px;
+    }
+
+    .youtube-caption {
+      margin-top: 6px;
+      font-size: 12px;
+      color: var(--muted);
     }
 
     .youtube-link {
@@ -195,6 +203,41 @@
       border: 1px solid #ffddec;
     }
 
+    .footer {
+      text-align: center;
+      color: #7c6874;
+      font-size: 13px;
+      padding: 6px 16px 24px;
+    }
+
+    .petal-layer {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 9999;
+    }
+
+    .petal {
+      position: absolute;
+      top: -30px;
+      width: 14px;
+      height: 10px;
+      background: radial-gradient(circle at 30% 30%, #ffe8f1 0%, #ffc4de 70%);
+      border-radius: 80% 20% 70% 30%;
+      opacity: 0.85;
+      animation: petal-fall linear forwards;
+    }
+
+    @keyframes petal-fall {
+      0% {
+        transform: translate3d(0, -20px, 0) rotate(0deg);
+      }
+      100% {
+        transform: translate3d(var(--drift-x, 80px), 110vh, 0) rotate(360deg);
+      }
+    }
+
     @media (max-width: 900px) {
       .cards {
         grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -224,6 +267,7 @@
         rel="noopener noreferrer"
         aria-label="유튜브 영상 열기"
       ><img src="https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/youtube.svg" alt="유튜브 아이콘"></a>
+      <span class="youtube-caption">함께 감상하기 좋은 플레이리스트</span>
     </div>
     <div class="flower-row" aria-label="벚꽃 장식 이미지">
       <img src="https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f338.png" alt="벚꽃">
@@ -272,6 +316,7 @@
       </article>
     </section>
   </main>
+  <p class="footer">김민주가 만들었다</p>
 
   <script
     src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
@@ -279,7 +324,40 @@
     crossorigin=""
   ></script>
   <script>
+    function startPetalAnimation() {
+      const layer = document.createElement("div");
+      layer.className = "petal-layer";
+      document.body.appendChild(layer);
+
+      function spawnPetal() {
+        const petal = document.createElement("span");
+        petal.className = "petal";
+        petal.style.left = `${Math.random() * 100}vw`;
+        petal.style.opacity = (0.55 + Math.random() * 0.35).toFixed(2);
+        petal.style.width = `${10 + Math.random() * 10}px`;
+        petal.style.height = `${8 + Math.random() * 8}px`;
+        petal.style.setProperty("--drift-x", `${-120 + Math.random() * 240}px`);
+        petal.style.animationDuration = `${7 + Math.random() * 8}s`;
+        layer.appendChild(petal);
+        petal.addEventListener("animationend", () => {
+          petal.remove();
+        });
+      }
+
+      setInterval(spawnPetal, 320);
+      for (let i = 0; i < 16; i += 1) {
+        setTimeout(spawnPetal, i * 140);
+      }
+    }
+
+    startPetalAnimation();
+
     const map = L.map("map").setView([37.5665, 126.9780], 12);
+    const currentLocation = {
+      name: "이화여자대학교 (현위치)",
+      lat: 37.5619,
+      lng: 126.9468
+    };
 
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
       maxZoom: 19,
@@ -321,6 +399,17 @@
 
     const bounds = [];
     const imageExtensions = ["jpg", "jpeg", "png", "webp", "gif"];
+
+    function haversineKm(originLat, originLng, destLat, destLng) {
+      const toRad = (deg) => (deg * Math.PI) / 180;
+      const earthRadiusKm = 6371;
+      const dLat = toRad(destLat - originLat);
+      const dLng = toRad(destLng - originLng);
+      const a = Math.sin(dLat / 2) ** 2 +
+        Math.cos(toRad(originLat)) * Math.cos(toRad(destLat)) * Math.sin(dLng / 2) ** 2;
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      return earthRadiusKm * c;
+    }
 
     function moveToCard(name) {
       const card = document.querySelector(`[data-spot-name="${name}"]`);
@@ -373,9 +462,48 @@
       });
     }
 
+    const currentMarker = L.circleMarker([currentLocation.lat, currentLocation.lng], {
+      radius: 10,
+      color: "#16a34a",
+      weight: 2,
+      fillColor: "#22c55e",
+      fillOpacity: 0.9
+    }).addTo(map);
+    currentMarker.bindPopup(`<strong>${currentLocation.name}</strong>`);
+    currentMarker.on("mouseover", () => {
+      currentMarker.bindTooltip(currentLocation.name, {
+        permanent: false,
+        direction: "top",
+        offset: [0, -12],
+        className: "spot-distance-tooltip"
+      }).openTooltip();
+    });
+    currentMarker.on("mouseout", () => {
+      currentMarker.closeTooltip();
+    });
+    bounds.push([currentLocation.lat, currentLocation.lng]);
+
     spots.forEach((spot) => {
       const marker = L.marker([spot.lat, spot.lng]).addTo(map);
       marker.bindPopup(`<strong>${spot.name}</strong><br>서울 벚꽃 명소`);
+
+      marker.on("mouseover", () => {
+        const distanceKm = haversineKm(currentLocation.lat, currentLocation.lng, spot.lat, spot.lng);
+        marker.bindTooltip(
+          `${spot.name}<br>이화여대 기준 ${distanceKm.toFixed(1)} km`,
+          {
+            permanent: false,
+            direction: "top",
+            offset: [0, -12],
+            className: "spot-distance-tooltip"
+          }
+        ).openTooltip();
+      });
+
+      marker.on("mouseout", () => {
+        marker.closeTooltip();
+      });
+
       marker.on("click", () => moveToCard(spot.name));
       bounds.push([spot.lat, spot.lng]);
     });
