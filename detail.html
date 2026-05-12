@@ -121,6 +121,31 @@
       padding-left: 18px;
     }
 
+    .review-list {
+      list-style: none;
+      margin: 10px 0 0;
+      padding: 0;
+      display: grid;
+      gap: 10px;
+    }
+
+    .review-item {
+      border: 1px solid #f8d9ea;
+      border-radius: 10px;
+      padding: 12px;
+      background: #fffafd;
+    }
+
+    .review-meta {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .review-text {
+      margin: 0;
+    }
+
     .actions {
       display: flex;
       justify-content: center;
@@ -192,6 +217,11 @@
       <ul id="spot-tips"></ul>
     </section>
 
+    <section class="card">
+      <h2>방문자 리뷰</h2>
+      <ul id="spot-reviews" class="review-list"></ul>
+    </section>
+
     <div class="actions">
       <a class="btn" href="./index.html">명소 목록으로 돌아가기</a>
     </div>
@@ -209,7 +239,12 @@
         description: "고궁의 단아한 건축미 위로 벚꽃이 내려앉는 서울 대표 봄 명소입니다.",
         highlight: "한복 착용 후 방문하면 사진 분위기가 더 살아납니다.",
         route: ["광화문 입장", "흥례문-근정전 관람", "경회루 주변 산책"],
-        tips: ["주말 혼잡이 심해 평일 오전 방문 추천", "입장 마감 시간 사전 확인 필수"]
+        tips: ["주말 혼잡이 심해 평일 오전 방문 추천", "입장 마감 시간 사전 확인 필수"],
+        reviews: [
+          { name: "익명", rating: 5, text: "고궁과 벚꽃 조합이 정말 예뻐서 사진이 잘 나와요." },
+          { name: "익명", rating: 4, text: "아침 일찍 가니 한적해서 산책하기 좋았습니다." },
+          { name: "익명", rating: 5, text: "경회루 근처 풍경이 특히 인상적이었어요." }
+        ]
       },
       "어린이대공원": {
         subtitle: "가족 나들이에 좋은 넓은 벚꽃 산책로",
@@ -219,7 +254,12 @@
         description: "넓은 동선과 편한 접근성으로 가족 단위 방문객이 많은 벚꽃 명소입니다.",
         highlight: "동물원, 놀이시설과 함께 하루 코스로 즐기기 좋습니다.",
         route: ["정문 입장", "호수길 산책", "잔디광장 휴식"],
-        tips: ["돗자리 준비 추천", "주말 주차 혼잡으로 대중교통 권장"]
+        tips: ["돗자리 준비 추천", "주말 주차 혼잡으로 대중교통 권장"],
+        reviews: [
+          { name: "익명", rating: 5, text: "아이와 함께 걷기 좋은 코스가 많아서 만족했어요." },
+          { name: "익명", rating: 4, text: "벚꽃 구간이 길어서 여유롭게 구경하기 좋았습니다." },
+          { name: "익명", rating: 5, text: "잔디광장에서 쉬면서 봄 분위기 즐기기 좋아요." }
+        ]
       },
       "석촌호수공원": {
         subtitle: "호수 둘레 벚꽃길이 아름다운 포토 스팟",
@@ -229,7 +269,12 @@
         description: "호수 반영과 벚꽃이 함께 보여 낮과 밤 모두 매력적인 풍경을 제공합니다.",
         highlight: "야간 조명 시간대에 감성적인 사진 촬영이 가능합니다.",
         route: ["동호 시작", "서호 방향 순환", "호수 야경 감상"],
-        tips: ["개화 절정 주말엔 매우 혼잡", "편한 운동화 착용 추천"]
+        tips: ["개화 절정 주말엔 매우 혼잡", "편한 운동화 착용 추천"],
+        reviews: [
+          { name: "익명", rating: 5, text: "호수 따라 걷다 보면 어디서 찍어도 포토존이에요." },
+          { name: "익명", rating: 4, text: "저녁 조명 켜질 때 분위기가 특히 좋아요." },
+          { name: "익명", rating: 5, text: "동호에서 서호로 도는 코스가 가장 만족스러웠습니다." }
+        ]
       },
       "여의도": {
         subtitle: "윤중로 벚꽃길로 유명한 축제 명소",
@@ -239,7 +284,12 @@
         description: "서울 벚꽃 시즌을 대표하는 장소로 긴 벚꽃길 산책을 즐길 수 있습니다.",
         highlight: "한강공원 피크닉을 연계하면 하루 일정이 알차집니다.",
         route: ["여의나루역 출발", "윤중로 산책", "한강공원 이동"],
-        tips: ["축제 기간 교통 통제 확인", "대중교통 이용 시 이동 편리"]
+        tips: ["축제 기간 교통 통제 확인", "대중교통 이용 시 이동 편리"],
+        reviews: [
+          { name: "익명", rating: 5, text: "벚꽃길이 길어서 산책 코스로 최고였어요." },
+          { name: "익명", rating: 4, text: "사람은 많지만 축제 느낌이 살아있어서 재미있었어요." },
+          { name: "익명", rating: 5, text: "한강까지 이어서 걷기 좋아서 데이트 코스로 추천합니다." }
+        ]
       },
       "남산타워": {
         subtitle: "벚꽃길과 서울 전경을 함께",
@@ -249,7 +299,12 @@
         description: "벚꽃 산책 후 전망대에서 서울 전경을 감상할 수 있는 입체적 코스입니다.",
         highlight: "일몰 시간대 방문 시 도심 야경과 함께 감상 가능",
         route: ["남산 입구 출발", "순환로 벚꽃길", "타워 전망대 방문"],
-        tips: ["가벼운 외투 준비", "도보 코스는 경사가 있어 편한 신발 필요"]
+        tips: ["가벼운 외투 준비", "도보 코스는 경사가 있어 편한 신발 필요"],
+        reviews: [
+          { name: "익명", rating: 5, text: "벚꽃 보며 오르다 보니 정상 풍경이 더 감동적이었어요." },
+          { name: "익명", rating: 4, text: "경사가 조금 있지만 중간중간 쉬며 걷기 좋았습니다." },
+          { name: "익명", rating: 5, text: "일몰 시간 맞춰 가니 뷰가 정말 멋졌어요." }
+        ]
       },
       "서울숲": {
         subtitle: "도심 속 여유로운 자연형 벚꽃 명소",
@@ -259,7 +314,12 @@
         description: "도심 접근성이 좋고 넓은 잔디와 함께 벚꽃 피크닉을 즐기기 좋습니다.",
         highlight: "산책, 피크닉, 카페 투어를 함께 하기 좋습니다.",
         route: ["서울숲역 입장", "가족마당 산책", "호수길 이동"],
-        tips: ["돗자리와 간단한 간식 준비", "주말엔 여유 있게 이동 시간 확보"]
+        tips: ["돗자리와 간단한 간식 준비", "주말엔 여유 있게 이동 시간 확보"],
+        reviews: [
+          { name: "익명", rating: 5, text: "잔디밭에서 쉬면서 벚꽃 보기 정말 좋았어요." },
+          { name: "익명", rating: 4, text: "카페랑 연결해서 코스 짜기 편한 점이 좋았습니다." },
+          { name: "익명", rating: 5, text: "산책로가 넓고 분위기가 차분해서 힐링됐어요." }
+        ]
       }
     };
 
@@ -289,6 +349,24 @@
       const li = document.createElement("li");
       li.textContent = item;
       tipsEl.appendChild(li);
+    });
+
+    const reviewsEl = document.getElementById("spot-reviews");
+    (data.reviews || []).forEach((review) => {
+      const li = document.createElement("li");
+      li.className = "review-item";
+
+      const meta = document.createElement("div");
+      meta.className = "review-meta";
+      meta.textContent = `${review.name} | ${"★".repeat(review.rating)}${"☆".repeat(5 - review.rating)}`;
+
+      const text = document.createElement("p");
+      text.className = "review-text";
+      text.textContent = review.text;
+
+      li.appendChild(meta);
+      li.appendChild(text);
+      reviewsEl.appendChild(li);
     });
   </script>
 </body>
